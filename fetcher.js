@@ -11,7 +11,7 @@ let args = process.argv.slice(2);
 // console.log(args[0][0]);
 
 request(args[0], (error, response, body) => {
-// wrong url
+  // wrong url
   if (error) {
     console.log("URL does not exist.");
     rl.close();
@@ -32,8 +32,15 @@ request(args[0], (error, response, body) => {
           rl.close();
         }
       });
-    } else { // download and save the file like a normal dude
-      console.log(`downloaded and saved ${fs.statSync(args[1]).size} bytes to ${args[1]}.`)
+    } else { // check if dat path is valid
+      fs.writeFile(args[1], body, (error2) => {
+        if (error2) {
+          console.log("Fail! Check if directory is valid.");
+          rl.close();
+        } else { // download and save the file like a normal dude
+          console.log(`Downloaded and saved ${fs.statSync(args[1]).size} bytes to ${args[1]}.`);
+        }
+      });
     }
   }
 });
